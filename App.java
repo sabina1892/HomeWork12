@@ -2,6 +2,7 @@ package HomeWork6;
 
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -12,10 +13,26 @@ import java.util.*;
 public class App {
 
 
-    private static FamilyController familyController;
+    private static FamilyController familyController= fc();
+    private static String mainMenu;
+    static { //static block to initialize mainMenu and subMenu1
+        //mainMenu loading
+        try {
+            mainMenu = commands();
+        } catch (FileNotFoundException exc) {
+            System.out.println("Could not find menu.txt file in the application directory.");
+            System.exit(1);
+        } catch (IOException exc) {
+            System.out.println("Could not read the menu.");
+            System.exit(1);
+        }
+    }
+
+
 
     public boolean starting_app() throws ParseException, IOException {
         commands();
+        displayMenu();
         System.out.print("Enter command to run: ");
         Scanner in = new Scanner(System.in);
         String command = in.nextLine();
@@ -53,7 +70,10 @@ public class App {
             return sb.toString();
         }
     }
-
+    private static void displayMenu() {
+        //prints mainMenu static field to the console
+        System.out.println(mainMenu);
+    }
     private void fillWithTestData() throws ParseException {
         Set<String> habits = new HashSet<>();
         habits.add("Eating");
@@ -242,5 +262,9 @@ public class App {
         }
         return 0;
     }
-
+    private static FamilyController fc() {
+        FamilyDao dao = new CollectionFamilyDao();
+        FamilyService service = new FamilyService(dao);
+        return new FamilyController(service);
+    }
 }

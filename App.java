@@ -11,28 +11,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class App {
-
-
-    private static FamilyController familyController= fc();
-    private static String mainMenu;
-    static { //static block to initialize mainMenu and subMenu1
-        //mainMenu loading
-        try {
-            mainMenu = commands();
-        } catch (FileNotFoundException exc) {
-            System.out.println("Could not find menu.txt file in the application directory.");
-            System.exit(1);
-        } catch (IOException exc) {
-            System.out.println("Could not read the menu.");
-            System.exit(1);
-        }
-    }
-
-
+    private static FamilyController familyController = conf();
 
     public boolean starting_app() throws ParseException, IOException {
         commands();
-        displayMenu();
         System.out.print("Enter command to run: ");
         Scanner in = new Scanner(System.in);
         String command = in.nextLine();
@@ -70,10 +52,7 @@ public class App {
             return sb.toString();
         }
     }
-    private static void displayMenu() {
-        //prints mainMenu static field to the console
-        System.out.println(mainMenu);
-    }
+
     private void fillWithTestData() throws ParseException {
         Set<String> habits = new HashSet<>();
         habits.add("Eating");
@@ -84,69 +63,68 @@ public class App {
 
         Human1 mother = new Human1("Jane", "Karleone", 1935);
         Human1 father = new Human1("Vito", "Karleone", 1932);
-        Human1 mother1 = new Human1("Marina", "Davidson", 1965);
-        Human1 father1 = new Human1("Tommy", "Davidson", 1960);
+        // Human1 mother1 = new Human1("Marina", "Davidson", 1965);
+        // Human1 father1 = new Human1("Tommy", "Davidson", 1960);
 
         Family family = new Family(mother, father);
-        Family family1 = new Family(mother1,father1);
-        System.out.println("-----");
+        // Family family1 = new Family(mother1,father1);
+        // System.out.println("-----");
 
-        Map<String,String> schedule = new HashMap<>();
+        Map<String, String> schedule = new HashMap<>();
         schedule.put(DayOfWeek.SUNDAY.name(), "do home work");
         mother.setSchedule(schedule);
-        mother1.setSchedule(schedule);
+        // mother1.setSchedule(schedule);
         Human1 child = new Human1("Michael", "Karleone", 2000,
-                95, schedule,family);
-        Human1 child1 = new Human1("Sergio", "Davidson", 1992,
-                93, schedule,family1);
+                95, schedule, family);
+        // Human1 child1 = new Human1("Sergio", "Davidson", 1992,
+        //         93, schedule,family1);
         Set<Pet1> bezdim_pet = new HashSet<>();
         family.setPet(bezdim_pet);
-        family1.setPet(bezdim_pet);
+        // family1.setPet(bezdim_pet);
         Men men = new Men();
         Women women = new Women();
-        family.addChild(child);
-        family.countFamily();
-        System.out.println(child.getFamily());
-        System.out.println(family);
+        // family.addChild(child);
+        // family.countFamily();
+        // System.out.println(child.getFamily());
+        // System.out.println(family);
 
-        family.deleteChild(child);
-        System.out.println(family);
-        family.countFamily();
+        // family.deleteChild(child);
+        // System.out.println(family);
+        // family.countFamily();
 
-        family1.addChild(child1);
-        family1.countFamily();
-        System.out.println(child1.getFamily());
-        System.out.println(family1);
+        // family1.addChild(child1);
+        // family1.countFamily();
+        // System.out.println(child1.getFamily());
+        // System.out.println(family1);
 
 
         FamilyController familyController = new FamilyController(new FamilyService(new CollectionFamilyDao()));
 
-        Family family01 = familyController.createNewFamily(mother,father);
-        Family family02 = familyController.createNewFamily(mother1,father1);
-        familyController.getFamilyByIndex(0);
-        familyController.addPet(0,pet);
-        familyController.adoptChild(child,family01);
-        familyController.adoptChild(child1,family02);
-        familyController.displayAllFamilies();
-        System.out.println(familyController.getFamiliesBiggerThan(1));
-        System.out.println(familyController.getFamiliesLessThan(10));
-        System.out.println(familyController.countFamiliesWithMemberNumber(2));
-        System.out.println("-----");
+        Family family01 = familyController.createNewFamily(mother, father);
+        // Family family02 = familyController.createNewFamily(mother1,father1);
+        // familyController.getFamilyByIndex(0);
+        // familyController.addPet(0,pet);
+        // familyController.adoptChild(child,family01);
+        // familyController.adoptChild(child1,family02);
+        // familyController.displayAllFamilies();
+        // System.out.println(familyController.getFamiliesBiggerThan(1));
+        // System.out.println(familyController.getFamiliesLessThan(10));
+        // System.out.println(familyController.countFamiliesWithMemberNumber(2));
+        // System.out.println("-----");
 
-        Date today = new Date();
-        DateFormat f = new SimpleDateFormat("dd MM yyyy");
-        Date year=null;
-        try {
-            year=f.parse( "10 08 2022");
-        }catch (ParseException e){
-            e.printStackTrace();
-        }
+        // Date today = new Date();
+        // DateFormat f = new SimpleDateFormat("dd MM yyyy");
+        // Date year=null;
+        // try {
+        //     year=f.parse( "10 08 2022");
+        // }catch (ParseException e){
+        //     e.printStackTrace();
+        // }
 
-        System.out.println(father.describeAge(today,year));
+        // System.out.println(father.describeAge(today,year));
 
 
-        System.out.println(familyController.adoptChild(new Human1("Jack", "Tomson", "24/03/2001", 100),family01));
-
+        // System.out.println(familyController.adoptChild(new Human1("Jack", "Tomson", "24/03/2001", 100),family01));
 
 
     }
@@ -192,7 +170,7 @@ public class App {
 
     private void deletingFamily() {
         System.out.println("Family count in database:" + familyController.count());
-        familyController.deleteFamilyByIndex(1);
+        familyController.deleteFamilyByReference(getFamilyById());
     }
 
     private void editFamily() throws ParseException, IOException {
@@ -203,7 +181,7 @@ public class App {
         switch (command) {
             case "1":
                 try {
-                    familyController.displayAllFamilies();
+                    familyController.adoptChild(adoptChild(), getFamilyById());
                 } catch (NullPointerException npe) {
                     System.out.println("Null data");
                 } catch (IndexOutOfBoundsException iob) {
@@ -235,8 +213,6 @@ public class App {
 
     private Human1 adoptChild() throws ParseException {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter child's gender: ");
-        String gender = sc.nextLine();
         System.out.print("Enter child's name: ");
         String name = sc.nextLine();
         System.out.print("Enter child's surname: ");
@@ -248,7 +224,6 @@ public class App {
         Human1 childAdopt = new Human1(name, surname, birthDate, iq);
         return childAdopt;
     }
-
     private int requestNumber() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter: ");
@@ -262,9 +237,12 @@ public class App {
         }
         return 0;
     }
-    private static FamilyController fc() {
+
+    private static FamilyController conf() {
         FamilyDao dao = new CollectionFamilyDao();
         FamilyService service = new FamilyService(dao);
         return new FamilyController(service);
     }
+
+
 }

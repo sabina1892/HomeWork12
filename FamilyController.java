@@ -39,7 +39,9 @@ public class FamilyController {
     public void deleteFamilyByIndex(int index) {
         this.familyService.deleteFamilyByIndex(index);
     }
-
+    public void deleteFamilyByReference(Family family) {
+        familyService.deleteFamilyByReference(family);
+    }
     public Family adoptChild(Human1 child,Family family) {
         return this.familyService.adoptChild(child, family);
     }

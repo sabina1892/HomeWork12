@@ -56,6 +56,10 @@ public class FamilyService {
            System.out.println("not exist");
        }
     }
+    public void deleteFamilyByReference(Family family) {
+        if (familyDao.deleteFamily(family)) System.out.println("Deleted");
+        else System.out.println("Family not exist");
+    }
     public Family adoptChild(Human1 child, Family family){
         family.addChild(child);
         return familyDao.saveFamily(family);
